@@ -8,8 +8,8 @@ async function readfile(){
   return JSON.parse(data);
 }
 
-function writefile(contacts){
-    return fs.writeFile(contactsPath, JSON.stringify(contacts, undefined, 2));
+async function writefile(contacts){
+    return await fs.writeFile(contactsPath, JSON.stringify(contacts, undefined, 2));
 }
 
 async function listContacts() {
@@ -22,7 +22,7 @@ async function getContactById(id) {
     // Повертає об'єкт контакту з таким id. Повертає null, якщо контакт з таким id не знайдений.
     const contacts = await readfile();
     const contact = contacts.find((contact) => contact.id === id);
-    return contact;
+    return contact??null;
 }
 
 async function removeContact(id) {
@@ -57,7 +57,7 @@ async function updateContact(id, contact) {
     const contacts = await listContacts();
     const index = contacts.findIndex((contact) => contact.id === id);
     if (index === -1) {
-        return undefined;
+        return null;
     }
     const newContact = { ...contact, id };
     contacts[index] = newContact;
